@@ -14,7 +14,6 @@ public class PlayerController : InputController
     public override float RetrieveMoveInput()
     {
         return Input.GetAxisRaw("Horizontal");
-
     }
 
 }
