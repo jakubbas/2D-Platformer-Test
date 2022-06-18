@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
     {
         direction.x = input.RetrieveMoveInput();
         //Retrieve a new velocity multiplied by the friction and the max speed, as long as it doesn't go belong 0.
-        newVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - ground.GetFriction(),0f);
+        newVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - ground.GetFriction(), 0f);
     }
 
     private void FixedUpdate()
@@ -41,7 +41,7 @@ public class Movement : MonoBehaviour
         //If is grounded is true (?), NO IDEA WHAT THE COLON DOES
         acceleration = isGrounded ? maxAcceleration : maxAirAcceleration;
 
-        maxSpeed = acceleration * Time.deltaTime;
+        maxSpeedChange = acceleration * Time.deltaTime;
 
         velocity.x = Mathf.MoveTowards(velocity.x, newVelocity.x, maxSpeedChange);
 

@@ -6,6 +6,7 @@ public class Ground : MonoBehaviour
 {
     private bool isGrounded;
     private float friction;
+    [SerializeField, Range(0f, 0.15f)] private float coyoteJumpTimer = 0.1f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -22,17 +23,28 @@ public class Ground : MonoBehaviour
     //Resets values to false/0 when the player exits the collision.
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isGrounded = false;
+        StartCoroutine(CoyoteJumpTimer());
         friction = 0;
     }
 
-    //Checks if the collision is the floor or not.
+    private IEnumerator CoyoteJumpTimer()
+    {
+        yield return new WaitForSeconds(coyoteJumpTimer);
+        isGrounded = false;
+        yield return null;
+    }
+
+    //Checks if the collision is the floor or not. 1 = Wall, 0 = Floor.
     private void EvaluateCollision(Collision2D other)
     {
         for (int i=0; i < other.contactCount; i++)
         {
             Vector2 normal = other.GetContact(i).normal;
             isGrounded |= normal.y >= 0.9f;
+            if (normal.y >= 0.9f)
+            {
+                StopCoroutine(CoyoteJumpTimer());
+            }
         }
     }
     //Retrieves the friction from the collided material.
