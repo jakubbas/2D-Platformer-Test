@@ -73,7 +73,6 @@ public class Jump : MonoBehaviour
         }
 
         rb.velocity = velocity;
-        Debug.Log(rb.velocity);
     }
 
     private void JumpAction()
@@ -119,7 +118,6 @@ public class Jump : MonoBehaviour
             {
                 //Increase jump count.
                 jumpPhase += 1;
-
                 //Formula for jump height, taking in the gravity and set jump height values.
                 float jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
                 velocity.y += jumpSpeed;
