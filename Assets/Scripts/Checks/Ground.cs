@@ -6,6 +6,7 @@ public class Ground : MonoBehaviour
 {
     private bool isGrounded;
     private float friction;
+    private string tag;
     [SerializeField, Range(0f, 0.15f)] private float coyoteJumpTimer = 0.1f;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -44,19 +45,30 @@ public class Ground : MonoBehaviour
             if (normal.y >= 0.9f)
             {
                 StopCoroutine(CoyoteJumpTimer());
+                RetrieveTag(other);
             }
         }
     }
     //Retrieves the friction from the collided material.
     private void RetrieveFriction(Collision2D other)
     {
-        PhysicsMaterial2D material = other.rigidbody.sharedMaterial;
-        friction = 0;
-        if (material != null)
+        if (other.rigidbody != null)
         {
-            friction = material.friction;
+            PhysicsMaterial2D material = other.rigidbody.sharedMaterial;
+            friction = 0;
+            if (material != null)
+            {
+                friction = material.friction;
+            }
         }
     }
+
+    private void RetrieveTag(Collision2D other)
+    {
+        string newTag = other.gameObject.tag;
+        tag = newTag;
+    }
+
     //Gets the isGrounded bool.
     public bool GetIsGrounded()
     {
@@ -66,5 +78,10 @@ public class Ground : MonoBehaviour
     public float GetFriction()
     {
         return friction;
+    }
+
+    public string GetTag()
+    {
+        return tag;
     }
 }

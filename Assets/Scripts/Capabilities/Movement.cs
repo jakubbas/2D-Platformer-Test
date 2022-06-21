@@ -32,13 +32,22 @@ public class Movement : MonoBehaviour
         direction.x = input.RetrieveMoveInput();
         //Retrieve a new velocity multiplied by the friction and the max speed, as long as it doesn't go belong 0.
         newVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - ground.GetFriction(), 0f);
+
+        //if (groundTag == "MovingPlatform")
+        //{
+        //    OnMovingObject();
+        //}
+
     }
+
+
 
     private void FixedUpdate()
     {
         isGrounded = ground.GetIsGrounded();
         velocity = rb.velocity;
-        //If is grounded is true (?), NO IDEA WHAT THE COLON DOES
+
+        //If is grounded is true, use max acceleration. If it isn't true, use max air acceleration.
         acceleration = isGrounded ? maxAcceleration : maxAirAcceleration;
 
         maxSpeedChange = acceleration * Time.deltaTime;
@@ -46,5 +55,7 @@ public class Movement : MonoBehaviour
         velocity.x = Mathf.MoveTowards(velocity.x, newVelocity.x, maxSpeedChange);
 
         rb.velocity = velocity;
+
+
     }
 }

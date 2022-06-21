@@ -43,10 +43,10 @@ GameObject:
   - component: {fileID: 6024427905343191210}
   - component: {fileID: 6024427905343191211}
   - component: {fileID: 6024427905343191223}
-  - component: {fileID: 6024427905343191208}
   - component: {fileID: 6024427905343191221}
   - component: {fileID: 6024427905343191209}
   - component: {fileID: 6024427905343191222}
+  - component: {fileID: 8323880622990497554}
   m_Layer: 0
   m_Name: PressurePlate
   m_TagString: Untagged
@@ -62,7 +62,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6024427905343191212}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.04, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.3625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -111,7 +111,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.15304625, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.4889117, g: 0.6981132, b: 0.45113918, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -142,32 +142,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &6024427905343191208
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6024427905343191212}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 1266fc0d8e693ea44b9fd3c246bcb7d7, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.11292598}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.7741479}
-  m_EdgeRadius: 0
 --- !u!61 &6024427905343191221
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -223,3 +197,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73bed1d90300543429079b19a7a3e676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &8323880622990497554
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6024427905343191212}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 1266fc0d8e693ea44b9fd3c246bcb7d7, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.18245211, y: 0.049855247}
+      - {x: -0.67160845, y: -0.5059917}
+      - {x: 0.6558066, y: -0.4995159}
+      - {x: 0.15994787, y: 0.041506328}
