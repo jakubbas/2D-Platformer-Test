@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private InputController input = null;
-    [SerializeField, Range(0f, 100f)] private float maxSpeed = 4f;
-    [SerializeField, Range(0f, 100f)] private float maxAcceleration = 35f;
-    [SerializeField, Range(0f, 100f)] private float maxAirAcceleration = 20f;
+    [SerializeField] private PlayerData data;
+
+    private InputController input = null;
+    private float maxSpeed = 4f;
+    private float maxAcceleration = 35f;
+    private float maxAirAcceleration = 20f;
 
     private Vector2 direction;
     private Vector2 newVelocity;
@@ -22,6 +24,12 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        input = data.inputController;
+        maxSpeed = data.maxSpeed;
+        maxAcceleration = data.maxAcceleration;
+        maxAirAcceleration = data.maxAirAcceleration;
+
+
         rb = GetComponent<Rigidbody2D>();
         ground = GetComponent<Ground>();
     }

@@ -14,6 +14,10 @@ public class Jump : MonoBehaviour
 
     [SerializeField, Range(0f, 0.5f)] private float earlyInputForgiveness = 0.1f;
 
+    [SerializeField, Range(0f, 100f)] private float jumpCutMultiplier = 2f;
+
+
+
     private Rigidbody2D rb;
     private Ground ground;
     private Vector2 velocity;
@@ -27,6 +31,7 @@ public class Jump : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
         ground = GetComponent<Ground>();
         //Default gravity when on the ground.
         defaultGravityScale = 1f;
@@ -38,12 +43,14 @@ public class Jump : MonoBehaviour
         //Check if the player wants to jump.
         desiredJump |= input.RetrieveJumpInput();
 
+        Debug.Log(desiredJump);
     }
 
     private void FixedUpdate()
     {
         isGrounded = ground.GetIsGrounded();       
         velocity = rb.velocity;
+
 
         if (isGrounded)
         {
@@ -63,7 +70,6 @@ public class Jump : MonoBehaviour
 
         else if (rb.velocity.y < 0f)
         {
-
             rb.gravityScale = downForce;
         }
 
