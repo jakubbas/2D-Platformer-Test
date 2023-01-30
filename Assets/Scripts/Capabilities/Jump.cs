@@ -16,7 +16,8 @@ public class Jump : MonoBehaviour
 
     [SerializeField, Range(0f, 100f)] private float jumpCutMultiplier = 2f;
 
-
+    private bool isRunning = false;
+    private bool tempDisable = false;
 
     private Rigidbody2D rb;
     private Ground ground;
@@ -27,6 +28,7 @@ public class Jump : MonoBehaviour
 
     private bool desiredJump;
     private bool isGrounded;
+
 
     private void Awake()
     {
@@ -40,17 +42,24 @@ public class Jump : MonoBehaviour
     
     void Update()
     {
+        //Debug.Log(velocity.y);
         //Check if the player wants to jump.
-        desiredJump |= input.RetrieveJumpInput();
 
-        Debug.Log(desiredJump);
+        if (!tempDisable)
+        {
+            desiredJump |= input.RetrieveJumpInput();
+        }
+        else
+        {
+            desiredJump = false;
+        }
+
     }
 
     private void FixedUpdate()
     {
         isGrounded = ground.GetIsGrounded();       
         velocity = rb.velocity;
-
 
         if (isGrounded)
         {
@@ -84,39 +93,50 @@ public class Jump : MonoBehaviour
     private void JumpAction()
     {
         //If the player is grounded or has air jumps left.
-        if (isGrounded || jumpPhase < maxAirJumps)
+        if ((isGrounded || jumpPhase < maxAirJumps))
         {
             //Increase jump count.
             jumpPhase += 1;
 
-            //Formula for jump height, taking in the gravity and set jump height values.
-            float jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
+            AddJumpVelocity();
 
-            //Check if the jump speed never goes negative due to the downward gravity.
-            if (velocity.y > 0f)
-            {
-                jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
-            }
-            //If the velocity is downward, clear the momentum. (Fixes double jump having less power while falling.)
-            else if (velocity.y < 0f)
-            {
-                jumpSpeed += Mathf.Abs(rb.velocity.y);
-            }
-            velocity.y += jumpSpeed;
+            //Debug.Log("here");
         }
         //Saving jump input if the player is about to land. Early Input Forgiveness.
-        else if (!isGrounded)
+        else if (!isGrounded && !isRunning)
         {
             StartCoroutine(InputForgivenessTimer());
         }
     }
 
+    private void AddJumpVelocity()
+    {
+        //Formula for jump height, taking in the gravity and set jump height values.
+        float jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
+
+        //Check if the jump speed never goes negative due to the downward gravity.
+        if (velocity.y > 0f)
+        {
+            jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
+        }
+        //If the velocity is downward, clear the momentum. (Fixes double jump having less power while falling.)
+        else if (velocity.y < 0f)
+        {
+            jumpSpeed += Mathf.Abs(rb.velocity.y);
+        }
+        velocity.y += jumpSpeed;
+        rb.velocity = velocity;
+
+    }
+
     private IEnumerator InputForgivenessTimer()
     {
+        isRunning = true;
         float tempTimer = earlyInputForgiveness;
         
         while (tempTimer > 0f)
         {
+            tempDisable = true;
             //Debug.Log(tempTimer);
             yield return new WaitForSeconds(0.05f);
             tempTimer -= 0.05f;
@@ -125,13 +145,23 @@ public class Jump : MonoBehaviour
                 //Increase jump count.
                 jumpPhase += 1;
                 //Formula for jump height, taking in the gravity and set jump height values.
-                float jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
-                velocity.y += jumpSpeed;
-                rb.velocity = velocity;
-                //JumpAction();
+
+                AddJumpVelocity();
+
+                isRunning = false;
+                tempDisable = false;
                 yield break;
             }
+
+            //if (!isGrounded)
+            //{
+            //    tempDisable = false;
+            //}
+
         }
+
+        tempDisable = false;
+        isRunning = false;
         yield break;
     }
 }
