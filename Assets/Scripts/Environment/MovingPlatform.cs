@@ -54,7 +54,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<Rigidbody2D>() != null)
+        if (other.gameObject.GetComponent<SticksToPlatform>() != null)
         {
             other.gameObject.transform.parent = this.transform;
             other.gameObject.GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.None;
@@ -66,7 +66,7 @@ public class MovingPlatform : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
 
-        if (other.gameObject.GetComponent<Rigidbody2D>() != null)
+        if (other.gameObject.GetComponent<SticksToPlatform>() != null)
         {
             other.gameObject.transform.parent = null;
             other.gameObject.GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.Interpolate;

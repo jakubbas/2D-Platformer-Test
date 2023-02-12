@@ -8,6 +8,9 @@ public class PressurePlate : MonoBehaviour
     private bool activated = false;
     private Animation animations;
 
+    //Gameobject list.
+    private List<GameObject> objectsTouchingPlate = new List<GameObject>();
+
     private void Start()
     {
         animations = GetComponent<Animation>();
@@ -15,17 +18,26 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        Debug.Log(other.gameObject.name);
+        if (other.gameObject.GetComponent<TriggersPlate>() != null)
         {
-            PlateDown();
+            if (objectsTouchingPlate.Count == 0)
+            {
+                PlateDown();
+            }
+            objectsTouchingPlate.Add(other.gameObject);
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.GetComponent<TriggersPlate>() != null)
         {
-            PlateUp();
+            objectsTouchingPlate.Remove(other.gameObject);
+            if (objectsTouchingPlate.Count == 0)
+            {
+                PlateUp();
+            }
         }
     }
 

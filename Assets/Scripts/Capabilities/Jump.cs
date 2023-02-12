@@ -13,11 +13,12 @@ public class Jump : MonoBehaviour
     [SerializeField, Range(0f, 100f)] private float upForce = 2f;
 
     [SerializeField, Range(0f, 0.5f)] private float earlyInputForgiveness = 0.1f;
+    private float earlyInputForgivenessTimer;
 
     [SerializeField, Range(0f, 100f)] private float jumpCutMultiplier = 2f;
 
     private bool isRunning = false;
-    private bool tempDisable = false;
+    //private bool tempDisable = false;
 
     private Rigidbody2D rb;
     private Ground ground;
@@ -37,23 +38,14 @@ public class Jump : MonoBehaviour
         ground = GetComponent<Ground>();
         //Default gravity when on the ground.
         defaultGravityScale = 1f;
+
+        earlyInputForgivenessTimer = earlyInputForgiveness;
     }
 
     
     void Update()
-    {
-        //Debug.Log(velocity.y);
-        //Check if the player wants to jump.
-
-        if (!tempDisable)
-        {
-            desiredJump |= input.RetrieveJumpInput();
-        }
-        else
-        {
-            desiredJump = false;
-        }
-
+    {    
+        desiredJump |= input.RetrieveJumpInput();
     }
 
     private void FixedUpdate()
@@ -95,18 +87,35 @@ public class Jump : MonoBehaviour
         //If the player is grounded or has air jumps left.
         if ((isGrounded || jumpPhase < maxAirJumps))
         {
+            //Reset Coroutine.
+            StopCoroutine(InputForgivenessTimer());
+            //StopAllCoroutines();
+            isRunning = false;
+            earlyInputForgivenessTimer = earlyInputForgiveness;
+
             //Increase jump count.
             jumpPhase += 1;
 
             AddJumpVelocity();
-
-            //Debug.Log("here");
         }
         //Saving jump input if the player is about to land. Early Input Forgiveness.
         else if (!isGrounded && !isRunning)
         {
             StartCoroutine(InputForgivenessTimer());
         }
+    }
+
+    private IEnumerator InputForgivenessTimer()
+    {
+        isRunning = true;
+        while (earlyInputForgivenessTimer > 0f)
+        {
+            yield return new WaitForSeconds(0.05f);
+            earlyInputForgivenessTimer -= 0.05f;
+            JumpAction();
+        }
+        isRunning = false;
+        yield break;
     }
 
     private void AddJumpVelocity()
@@ -129,39 +138,39 @@ public class Jump : MonoBehaviour
 
     }
 
-    private IEnumerator InputForgivenessTimer()
-    {
-        isRunning = true;
-        float tempTimer = earlyInputForgiveness;
+    //private IEnumerator InputForgivenessTimer()
+    //{
+    //    isRunning = true;
+    //    float tempTimer = earlyInputForgiveness;
         
-        while (tempTimer > 0f)
-        {
-            tempDisable = true;
-            //Debug.Log(tempTimer);
-            yield return new WaitForSeconds(0.05f);
-            tempTimer -= 0.05f;
-            if (isGrounded)
-            {
-                //Increase jump count.
-                jumpPhase += 1;
-                //Formula for jump height, taking in the gravity and set jump height values.
+    //    while (tempTimer > 0f)
+    //    {
+    //        tempDisable = true;
+    //        //Debug.Log(tempTimer);
+    //        yield return new WaitForSeconds(0.05f);
+    //        tempTimer -= 0.05f;
+    //        if (isGrounded)
+    //        {
+    //            //Increase jump count.
+    //            jumpPhase += 1;
+    //            //Formula for jump height, taking in the gravity and set jump height values.
 
-                AddJumpVelocity();
+    //            AddJumpVelocity();
 
-                isRunning = false;
-                tempDisable = false;
-                yield break;
-            }
+    //            isRunning = false;
+    //            tempDisable = false;
+    //            yield break;
+    //        }
 
-            //if (!isGrounded)
-            //{
-            //    tempDisable = false;
-            //}
+    //        //if (!isGrounded)
+    //        //{
+    //        //    tempDisable = false;
+    //        //}
 
-        }
+    //    }
 
-        tempDisable = false;
-        isRunning = false;
-        yield break;
-    }
+    //    tempDisable = false;
+    //    isRunning = false;
+    //    yield break;
+    //}
 }
